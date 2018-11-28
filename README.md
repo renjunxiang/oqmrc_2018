@@ -5,14 +5,14 @@ AI Challenger 2018 阅读理解赛道代码分享
 [![](https://img.shields.io/badge/numpy-1.14.3-brightgreen.svg)](https://pypi.python.org/pypi/numpy/1.15.3)
 [![](https://img.shields.io/badge/pandas-0.23.0-brightgreen.svg)](https://pypi.python.org/pypi/pandas/0.23.4)
 [![](https://img.shields.io/badge/jieba-0.39-brightgreen.svg)](https://pypi.python.org/pypi/jieba/0.39)
-[![](https://img.shields.io/badge/gensim-3.4.0-brightgreen.svg)](https://pypi.python.org/pypi/gensim/3.6.0)<br>
+[![](https://img.shields.io/badge/gensim-3.4.0-brightgreen.svg)](https://pypi.python.org/pypi/gensim/3.6.0)
 [![](https://img.shields.io/badge/tensorflow-1.8.0-brightgreen.svg)](https://pypi.python.org/pypi/tensorflow-gpu/1.8.0)
 [![](https://img.shields.io/badge/keras-2.2.0-brightgreen.svg)](https://pypi.python.org/pypi/keras/2.2.0)
 
 ## **比赛简介**
 本次竞赛将重点针对阅读理解中较为复杂的，需要利用整篇文章中多个句子的信息进行综合才能得到正确答案的观点型问题开展评测。本次竞赛将利用准确率进行评分，作为主要评价指标。<br>
 
-## 比赛任务：
+## 比赛任务
 根据已有的训练数据，即：<br>
 知识：人有人言，兽有兽语，动物是不会听懂人说话的<br>
 问题：老鼠听得懂人话吗<br>
@@ -28,6 +28,8 @@ AI Challenger 2018 阅读理解赛道代码分享
 ## **分析思路**
 限于游戏本的硬件，本次比赛使用的模型非常简单，预训练词向量 + CNN/RNN + simple-attention + sigmoid<br>
 模型融合（25个模型投票）在testa可以到0.745，testb理论上也可以到。因为决赛限制空间，testb成绩稍低一些。<br>
+
+![](https://github.com/renjunxiang/oqmrc_2018/blob/master/picture/net.png)<br>
 
 预训练词向量 | Model | Attention | Accuracy
 ---------- | -------- | --------- | ---------
@@ -60,13 +62,13 @@ maxlen = [450, 22, 4] passage、quary、alternative保留长度<br>
 运行vec2weight.py，自行选择要使用的词向量和保存路径，结果为npy格式的矩阵。词向量来源于<https://github.com/Embedding/Chinese-Word-Vectors>，在此表示感谢！
 
 4.**训练模型**<br>
-4.1 我使用了百度百科词向量，修改competition/net_3a/rnn_attention_concat.py中词向量weight_baidubaike.npy的路径。
+4.1 我使用了百度百科词向量，修改competition/net_3a/rnn_attention_concat.py中词向量weight_baidubaike.npy的路径<br>
 4.2 运行model_word.py，模型、valid预测结果、test预测结果，保存在model/3a<br>
-4.3 选择模型准确率高的预测结果，整理好文件名称，放入model/3a/好的模型/验证集，model/3a/好的模型/测试集。<br>
+4.3 选择模型准确率高的预测结果，整理好文件名称，放入model/3a/好的模型/验证集，model/3a/好的模型/测试集<br>
 4.4 手动运行model/3a/ensemble.py，逐个增减预测结果，看融合效果。评估结果见 模型评估.xlsx<br>
 4.5 选择投票结果不一致的数据（选择3个模型，，一致比例为78%，准确率0.79；不一致比例22%，准确率0.49）<br>
-手动运行model/3a/regular.py，修改negative_true（否定词，较大概率样本是负面的），negative_false（否定词，较大概率把样本误分类为负面），具体词语可以逐个去试出较好的修正结果。<br>
-例如：negative_true = ['不能']，negative_false = ['不一定']<br>（因为这个是需要去看testa数据的，并不符合训练过程中test数据隔离，决赛没有使用）
+手动运行model/3a/regular.py，修改negative_true（否定词，较大概率样本是负面的），negative_false（否定词，较大概率把样本误分类为负面），具体词语可以逐个去试出较好的修正结果<br>
+例如：negative_true = ['不能']，negative_false = ['不一定']（因为这个是需要去看testa数据的，并不符合训练过程中test数据隔离，决赛没有使用）<br>
 4.6 选择最终参与投票的模型和否定词<br>
 
 ## **测试代码**
@@ -74,8 +76,8 @@ maxlen = [450, 22, 4] passage、quary、alternative保留长度<br>
 1.input文件夹放入测试数据data<br>
 2.手动修改rnn_attention_concat.py词向量中weight_baidubaike.npy的路径<br>
 3.修改预处理过程中train_tokenizer.pkl的位置，运行data_cut_word.py预处理testb<br>
-4.训练过程中是一边训练一遍输出testa的结果，手动运行模型融合的。决赛环境需要把不同模型的预测结果保留好，在model_word.py中直接融合。
-5.output文件夹输出最终结果
+4.训练过程中是一边训练一遍输出testa的结果，手动运行模型融合的；决赛环境需要把不同模型的预测结果保留好，在model_word.py中直接融合<br>
+5.output文件夹输出最终结果<br>
 
 ## **期待准确率0.8的大神能分享代码！**
 
