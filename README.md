@@ -6,8 +6,8 @@ AI Challenger 2018 阅读理解赛道代码分享
 [![](https://img.shields.io/badge/pandas-0.23.0-brightgreen.svg)](https://pypi.python.org/pypi/pandas/0.23.4)
 [![](https://img.shields.io/badge/jieba-0.39-brightgreen.svg)](https://pypi.python.org/pypi/jieba/0.39)
 [![](https://img.shields.io/badge/gensim-3.4.0-brightgreen.svg)](https://pypi.python.org/pypi/gensim/3.6.0)<br>
-[![](https://img.shields.io/badge/tensorflow-1.8.0-brightgreen.svg)](https://pypi.python.org/pypi/tensorflow-gpu/1.8.0)<br>
-[![](https://img.shields.io/badge/keras-2.2.0-brightgreen.svg)](https://pypi.python.org/pypi/keras/2.2.0)<br>
+[![](https://img.shields.io/badge/tensorflow-1.8.0-brightgreen.svg)](https://pypi.python.org/pypi/tensorflow-gpu/1.8.0)
+[![](https://img.shields.io/badge/keras-2.2.0-brightgreen.svg)](https://pypi.python.org/pypi/keras/2.2.0)
 
 ## **比赛简介**
 本次竞赛将重点针对阅读理解中较为复杂的，需要利用整篇文章中多个句子的信息进行综合才能得到正确答案的观点型问题开展评测。本次竞赛将利用准确率进行评分，作为主要评价指标。<br>
@@ -26,8 +26,9 @@ AI Challenger 2018 阅读理解赛道代码分享
 答案：？<br>
 
 ## **分析思路：**
-**限于游戏本的硬件，本次比赛使用的模型非常简单，预训练词向量 + CNN/RNN + simple-attention + sigmoid**<br>
-预训练词向量 | CNN/RNN | Attention | Accuracy|
+限于游戏本的硬件，本次比赛使用的模型非常简单，预训练词向量 + CNN/RNN + simple-attention + sigmoid<br>
+<br>
+预训练词向量 | CNN/RNN | Attention | Accuracy
 --------- | -------- | --------- | ---------
 无 | CNN | 无 | 0.685
 无 | CNN | 有 | 0.695
