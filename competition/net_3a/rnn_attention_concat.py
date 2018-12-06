@@ -2,7 +2,7 @@ from keras.models import Model
 from keras.layers import Input, Embedding, Concatenate
 from keras.layers import Bidirectional, LSTM, GlobalMaxPool1D,GlobalAvgPool1D
 from keras.layers import Dropout, BatchNormalization, Dense, Activation, Add
-from .attention import self_attention
+from .attention import attention
 import numpy as np
 
 
@@ -55,24 +55,15 @@ def rnn_attention_concat(maxlen=[100, 24, 8],
     rnn_p = layer_rnn(word_vec_p)
     rnn_q = layer_rnn(word_vec_q)
 
-    # rnn_a0 = layer_rnn(word_vec_a0)
-    # rnn_a1 = layer_rnn(word_vec_a1)
-    # rnn_a2 = layer_rnn(word_vec_a2)
     rnn_a0 = word_vec_a0
     rnn_a1 = word_vec_a1
     rnn_a2 = word_vec_a2
 
-    attention_p = self_attention(rnn_p, filters * 2)
-    attention_q = self_attention(rnn_q, filters * 2)
-    # attention_a0 = self_attention(rnn_p, filters * 2)
-    # attention_a1 = self_attention(rnn_q, filters * 2)
-    # attention_a2 = self_attention(rnn_p, filters * 2)
+    attention_p = attention(rnn_p, filters * 2)
+    attention_q = attention(rnn_q, filters * 2)
 
     attention_p = Activation('relu')(attention_p)
     attention_q = Activation('relu')(attention_q)
-    # attention_a0 = Activation('relu')(attention_a0)
-    # attention_a1 = Activation('relu')(attention_a1)
-    # attention_a2 = Activation('relu')(attention_a2)
 
     x_p = GlobalMaxPool1D()(attention_p)
     x_q = GlobalMaxPool1D()(attention_q)
@@ -80,16 +71,8 @@ def rnn_attention_concat(maxlen=[100, 24, 8],
     x_a1 = GlobalMaxPool1D()(rnn_a1)
     x_a2 = GlobalMaxPool1D()(rnn_a2)
 
-    # x_a0 = GlobalAvgPool1D()(rnn_a0)
-    # x_a1 = GlobalAvgPool1D()(rnn_a1)
-    # x_a2 = GlobalAvgPool1D()(rnn_a2)
-
     x_p = BatchNormalization()(x_p)
     x_q = BatchNormalization()(x_q)
-    # BN = BatchNormalization()
-    # x_a0 = BN(x_a0)
-    # x_a1 = BN(x_a1)
-    # x_a2 = BN(x_a2)
 
     layer_dense1 = Dense(1000, activation="relu")
     layer_dense2 = Dense(1, activation="sigmoid")
@@ -106,14 +89,11 @@ def rnn_attention_concat(maxlen=[100, 24, 8],
     y2 = layer_dense1(y2)
     y2 = layer_dense2(y2)
 
-    # y = Concatenate(axis=1)([y0, y1, y2])
-    # y = Activation('softmax')(y)
 
     model = Model(inputs=[data_input_p, data_input_q, data_input_a0, data_input_a1, data_input_a2],
                   outputs=[y0, y1, y2])
     model.compile(
         loss='binary_crossentropy',
-        # loss='categorical_crossentropy',
         optimizer='adam',
         metrics=['acc'])
 

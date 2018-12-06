@@ -23,7 +23,7 @@ def merge_labels(labels, reverse=False):
     return labels.tolist()
 
 
-def ensemble(path_file='./model/3a/好的模型',text_name='valid'):
+def ensemble(path_file='./model/3a/好的模型', text_name='valid'):
     path_all = os.listdir(path_file)
     path_valid = [i for i in path_all if text_name in i]
 
@@ -61,13 +61,18 @@ def all_same(path_file, text_name='valid'):
 
 
 if __name__ == '__main__':
+    from competition.data_deal import label_clf
+
     f = open('D:/work/svn/oqmrc_2018/trunk/data/ai_challenger_oqmrc_validationset.json',
              encoding='utf-8', mode='r')
     data = f.readlines()
     labels = [json.loads(i)['answer'] for i in data]
     f.close()
 
-    _labels_merge = ensemble(path_file='D:/work/svn/oqmrc_2018/trunk/model/3a/好的模型/测试集',text_name='test')
+    _, _, error_id_valid = label_clf('./label/clf/valid_label.pkl',
+                                     './label/clf/valid_error_id.pkl')
+
+    _labels_merge = ensemble(path_file='D:/work/svn/oqmrc_2018/trunk/model/3a/好的模型/测试集', text_name='test')
 
     accu = (np.array(labels) == np.array(_labels_merge)).mean()
 
@@ -86,10 +91,10 @@ if __name__ == '__main__':
     same_precent = sum(index_same) / 30000
 
     print(pd.DataFrame([[accu_all, accu_clf, accu_error, accu_same, same_precent]],
-                       columns=['accu_all', 'accu_clf', 'accu_other', 'accu_same','same_precent']))
+                       columns=['accu_all', 'accu_clf', 'accu_other', 'accu_same', 'same_precent']))
 
     ids_t = range(280001, 290001)
-    with open('./model/3a/merge_test.txt',mode='w', encoding='utf-8') as f:
+    with open('./model/3a/merge_test.txt', mode='w', encoding='utf-8') as f:
         for num, score_test_1 in enumerate(_labels_merge):
             line = '%d\t%s' % (ids_t[num], _labels_merge[num])
             f.write('%s\n' % line)

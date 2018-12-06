@@ -188,7 +188,7 @@ def text2seq(texts_cut,
         for text_cut in texts_cut_cp:
             text_seq = OrderedDict()
 
-            tokenizer.num_words = words_num
+            tokenizer.num_words = words_num + 1
             passage_seq = tokenizer.texts_to_sequences([text_cut['passage']])
             query_seq = tokenizer.texts_to_sequences([text_cut['query']])
             alternative0_seq = tokenizer.texts_to_sequences([text_cut['alternative0']])
@@ -220,7 +220,7 @@ def text2seq(texts_cut,
         word_index_all = tokenizer.word_index
         word_index = {}
         for word in word_index_all:
-            if word_index_all[word] < words_num:
+            if word_index_all[word] < words_num + 1:
                 word_index.update({word: word_index_all[word]})
 
         if dynamic == 1:

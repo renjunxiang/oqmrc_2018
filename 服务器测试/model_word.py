@@ -3,7 +3,7 @@ import pickle
 import numpy as np
 import pandas as pd
 from competition.data_deal import read_seq
-from competition.net_3a import rnn_attention_concat_multi
+from competition.net_3a import rnn_attention_concat
 
 cut_level = 'word'
 maxlen = [150, 22, 4]

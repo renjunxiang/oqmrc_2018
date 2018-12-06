@@ -21,8 +21,3 @@ for vec_name in vec_names:
     np.save(path_weight, vec_all_array)
 
     print('finish ',vec_name)
-
-# with open(path_tokenizer, mode='rb') as f:
-#     tokenizer = pickle.load(f)
-# len(tokenizer.word_index)
-# len(tokenizer.index_word)
